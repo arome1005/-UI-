@@ -11,9 +11,16 @@ import { LiuguangModule } from "@/components/modules/liuguang-module"
 import { WenCeModule } from "@/components/modules/wence-module"
 import { SettingsModule } from "@/components/modules/settings-module"
 import { EmptyModule } from "@/components/modules/empty-module"
+import { LoginPage } from "@/components/login-page"
 
 export default function Home() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [activeModule, setActiveModule] = useState("liubai")
+
+  // 如果未登录，显示登录页面
+  if (!isLoggedIn) {
+    return <LoginPage onLoginSuccess={() => setIsLoggedIn(true)} />
+  }
 
   const renderModule = () => {
     switch (activeModule) {

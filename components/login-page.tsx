@@ -358,7 +358,11 @@ function GoogleIcon() {
   )
 }
 
-export function LoginPage() {
+interface LoginPageProps {
+  onLoginSuccess?: () => void
+}
+
+export function LoginPage({ onLoginSuccess }: LoginPageProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [email, setEmail] = useState("")
@@ -433,7 +437,13 @@ export function LoginPage() {
           </div>
 
           {/* 表单 */}
-          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-6" onSubmit={(e) => {
+            e.preventDefault()
+            // 模拟登录成功
+            if (email && password) {
+              onLoginSuccess?.()
+            }
+          }}>
             {/* 邮箱 */}
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium text-foreground">
