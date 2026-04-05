@@ -238,12 +238,10 @@ function WorkCard({
   work,
   onEdit,
   onContinue,
-  onOpenWork,
 }: {
   work: Work
   onEdit: (work: Work) => void
   onContinue: (work: Work) => void
-  onOpenWork?: (workId: string, workTitle: string) => void
 }) {
   const status = statusConfig[work.status]
   const StatusIcon = status.icon
@@ -329,10 +327,7 @@ function WorkCard({
           <Button
             size="sm"
             className="gap-2"
-            onClick={() => {
-              onContinue(work)
-              onOpenWork?.(work.id, work.title)
-            }}
+            onClick={() => onContinue(work)}
           >
             <PenTool className="h-4 w-4" />
             继续写作
@@ -702,11 +697,7 @@ function NewWorkDialog({
 }
 
 // 主模块组件
-interface LiuBaiModuleProps {
-  onOpenWork?: (workId: string, workTitle: string) => void
-}
-
-export function LiuBaiModule({ onOpenWork }: LiuBaiModuleProps) {
+export function LiuBaiModule() {
   const [works, setWorks] = useState<Work[]>(mockWorks)
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [searchQuery, setSearchQuery] = useState("")
@@ -1030,7 +1021,6 @@ export function LiuBaiModule({ onOpenWork }: LiuBaiModuleProps) {
                     work={work}
                     onEdit={handleEditWork}
                     onContinue={handleContinueWriting}
-                    onOpenWork={onOpenWork}
                   />
                 ))}
 
