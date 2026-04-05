@@ -230,7 +230,7 @@ const mockAnalysisCards: AnalysisCard[] = [
   },
   {
     id: "3",
-    title: "战斗节奏控制",
+    title: "���斗节奏控制",
     type: "pacing",
     source: "《全职高手》",
     content: "长战斗中穿��「呼吸点」——技能冷却、双方喘息、旁观者反应——让读者有消化空间，避免疲劳。",
@@ -377,15 +377,23 @@ export function WenCeModule() {
                 {filteredConversations.map((conv) => {
                   const config = strategyConfig[conv.type]
                   return (
-                    <button
+                    <div
                       key={conv.id}
                       onClick={() => setSelectedConversation(conv)}
                       className={cn(
-                        "group flex w-full flex-col gap-1.5 rounded-lg p-3 text-left transition-colors",
+                        "group flex w-full cursor-pointer flex-col gap-1.5 rounded-lg p-3 text-left transition-colors",
                         selectedConversation?.id === conv.id
                           ? "bg-primary/10 border border-primary/30"
                           : "hover:bg-muted/30"
                       )}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault()
+                          setSelectedConversation(conv)
+                        }
+                      }}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex items-center gap-2">
@@ -449,7 +457,7 @@ export function WenCeModule() {
                           {conv.messageCount} 条
                         </span>
                       </div>
-                    </button>
+                    </div>
                   )
                 })}
               </div>
