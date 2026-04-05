@@ -6,7 +6,7 @@ import { CangJingModule } from "@/components/modules/cangjing-module"
 import { ShengHuiModule } from "@/components/modules/shenghui-module"
 import { LuoBiModule } from "@/components/modules/luobi-module"
 import { TuiYanModule } from "@/components/modules/tuiyan-module"
-import { LiubaiModule } from "@/components/modules/liubai-module"
+import { LiuBaiModule } from "@/components/modules/liubai-module"
 import { LiuguangModule } from "@/components/modules/liuguang-module"
 import { WenCeModule } from "@/components/modules/wence-module"
 import { SettingsModule } from "@/components/modules/settings-module"
@@ -18,7 +18,7 @@ export default function Home() {
   const renderModule = () => {
     switch (activeModule) {
       case "liubai":
-        return <LiubaiModule />
+        return <LiuBaiModule />
       case "tuiyan":
         return <TuiYanModule />
       case "liuguang":
