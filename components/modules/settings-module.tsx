@@ -446,6 +446,219 @@ function BillingSettings() {
         </div>
       </div>
 
+      {/* 超阈值强制验证设置 */}
+      <div className="rounded-xl border border-border/40 bg-card/50 p-6">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-foreground">超阈值强制验证</h3>
+          <Badge variant="outline" className="gap-1 text-amber-500 border-amber-500/50">
+            <Shield className="h-3 w-3" />
+            安全保护
+          </Badge>
+        </div>
+        <p className="mb-4 text-sm text-muted-foreground">
+          当单次AI请求预估消耗超过设定阈值时，需要二次确认才能执行，防止误操作导致大量消耗
+        </p>
+
+        <div className="space-y-4">
+          {/* 验证模式 */}
+          <div className="rounded-lg border border-border/30 bg-muted/20 p-4">
+            <div className="mb-3 flex items-center justify-between">
+              <p className="font-medium text-foreground">验证模式</p>
+            </div>
+            <div className="space-y-2">
+              <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-border/30 bg-background/50 p-3 hover:bg-muted/30">
+                <input type="radio" name="verifyMode" className="text-primary" defaultChecked />
+                <div>
+                  <p className="text-sm font-medium text-foreground">关闭</p>
+                  <p className="text-xs text-muted-foreground">不进行任何验证提示</p>
+                </div>
+              </label>
+              <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-border/30 bg-background/50 p-3 hover:bg-muted/30">
+                <input type="radio" name="verifyMode" className="text-primary" />
+                <div>
+                  <p className="text-sm font-medium text-foreground">仅提示</p>
+                  <p className="text-xs text-muted-foreground">显示消耗预估，用户可选择继续</p>
+                </div>
+              </label>
+              <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-primary/50 bg-primary/5 p-3">
+                <input type="radio" name="verifyMode" className="text-primary" />
+                <div>
+                  <p className="text-sm font-medium text-foreground">强制确认</p>
+                  <p className="text-xs text-muted-foreground">必须点击确认按钮才能继续执行</p>
+                </div>
+                <Badge className="ml-auto">推荐</Badge>
+              </label>
+            </div>
+          </div>
+
+          {/* 验证阈值设置 */}
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-lg border border-border/30 bg-muted/20 p-4">
+              <div className="mb-2 flex items-center gap-2">
+                <Target className="h-4 w-4 text-primary" />
+                <p className="text-sm font-medium text-foreground">Token 阈值</p>
+              </div>
+              <p className="mb-3 text-xs text-muted-foreground">单次请求预估超过此值时触发验证</p>
+              <Select defaultValue="50000">
+                <SelectTrigger className="bg-background">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="20000">20K tokens (约$0.02)</SelectItem>
+                  <SelectItem value="50000">50K tokens (约$0.05)</SelectItem>
+                  <SelectItem value="100000">100K tokens (约$0.10)</SelectItem>
+                  <SelectItem value="200000">200K tokens (约$0.20)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="rounded-lg border border-border/30 bg-muted/20 p-4">
+              <div className="mb-2 flex items-center gap-2">
+                <CircleDollarSign className="h-4 w-4 text-green-500" />
+                <p className="text-sm font-medium text-foreground">费用阈值</p>
+              </div>
+              <p className="mb-3 text-xs text-muted-foreground">单次请求预估费用超过此值时触发验证</p>
+              <Select defaultValue="0.10">
+                <SelectTrigger className="bg-background">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="0.05">$0.05</SelectItem>
+                  <SelectItem value="0.10">$0.10</SelectItem>
+                  <SelectItem value="0.25">$0.25</SelectItem>
+                  <SelectItem value="0.50">$0.50</SelectItem>
+                  <SelectItem value="1.00">$1.00</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* 高危操作始终确认 */}
+          <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-4">
+            <div className="mb-3 flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 text-amber-500" />
+              <p className="font-medium text-foreground">高危操作始终确认</p>
+            </div>
+            <p className="mb-3 text-xs text-muted-foreground">
+              以下操作无论消耗大小，都需要二次确认
+            </p>
+            <div className="space-y-2">
+              <label className="flex cursor-pointer items-center gap-3">
+                <Checkbox defaultChecked id="verify-batch" />
+                <span className="text-sm text-foreground">批量生成（整卷仿写、多章推演）</span>
+              </label>
+              <label className="flex cursor-pointer items-center gap-3">
+                <Checkbox defaultChecked id="verify-rag" />
+                <span className="text-sm text-foreground">全文关联生成（使用藏经提炼）</span>
+              </label>
+              <label className="flex cursor-pointer items-center gap-3">
+                <Checkbox id="verify-rewrite" />
+                <span className="text-sm text-foreground">重写已有内容（覆盖原文）</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 进阶防误触设置 */}
+      <div className="rounded-xl border border-border/40 bg-card/50 p-6">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-foreground">进阶防误触</h3>
+          <Badge variant="outline" className="text-xs">可选</Badge>
+        </div>
+        <p className="mb-4 text-sm text-muted-foreground">
+          额外的安全机制，适合担心误操作的用户。这些设置会增加操作步骤但能有效防止意外消耗。
+        </p>
+
+        <div className="space-y-4">
+          {/* 数字确认 */}
+          <div className="flex items-center justify-between rounded-lg border border-border/30 bg-muted/20 p-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
+                <Keyboard className="h-5 w-5 text-blue-500" />
+              </div>
+              <div>
+                <p className="font-medium text-foreground">数字确认</p>
+                <p className="text-xs text-muted-foreground">超阈值时需输入屏幕显示的验证码</p>
+              </div>
+            </div>
+            <Switch />
+          </div>
+
+          {/* 长按确认 */}
+          <div className="flex items-center justify-between rounded-lg border border-border/30 bg-muted/20 p-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-500/10">
+                <Timer className="h-5 w-5 text-purple-500" />
+              </div>
+              <div>
+                <p className="font-medium text-foreground">长按确认</p>
+                <p className="text-xs text-muted-foreground">高危操作需长按按钮2秒以上</p>
+              </div>
+            </div>
+            <Switch />
+          </div>
+
+          {/* 冷却时间 */}
+          <div className="flex items-center justify-between rounded-lg border border-border/30 bg-muted/20 p-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-500/10">
+                <Clock className="h-5 w-5 text-cyan-500" />
+              </div>
+              <div>
+                <p className="font-medium text-foreground">操作冷却</p>
+                <p className="text-xs text-muted-foreground">同一高危操作间隔至少5秒</p>
+              </div>
+            </div>
+            <Switch />
+          </div>
+
+          {/* 会话/日累计限制 */}
+          <div className="rounded-lg border border-border/30 bg-muted/20 p-4">
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <BarChart3 className="h-4 w-4 text-orange-500" />
+                <p className="font-medium text-foreground">累计消耗限制</p>
+              </div>
+              <Switch defaultChecked />
+            </div>
+            <p className="mb-3 text-xs text-muted-foreground">
+              当会话或当日累计消耗达到限额时，锁定AI功能需手动解锁
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="mb-1 block text-xs text-muted-foreground">会话限额</label>
+                <Select defaultValue="5">
+                  <SelectTrigger className="bg-background">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="2">$2.00</SelectItem>
+                    <SelectItem value="5">$5.00</SelectItem>
+                    <SelectItem value="10">$10.00</SelectItem>
+                    <SelectItem value="unlimited">不限制</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs text-muted-foreground">日限额</label>
+                <Select defaultValue="10">
+                  <SelectTrigger className="bg-background">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="5">$5.00</SelectItem>
+                    <SelectItem value="10">$10.00</SelectItem>
+                    <SelectItem value="20">$20.00</SelectItem>
+                    <SelectItem value="unlimited">不限制</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* 充值与订阅 */}
       <div className="rounded-xl border border-border/40 bg-card/50 p-6">
         <h3 className="mb-4 text-lg font-semibold text-foreground">充值与订阅</h3>
