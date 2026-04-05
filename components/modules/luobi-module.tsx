@@ -100,7 +100,6 @@ import {
 } from "@/components/ui/dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Slider } from "@/components/ui/slider"
-import { ImmersiveEditor } from "@/components/immersive-editor"
 
 // 类型定义
 interface BibleEntry {
@@ -190,7 +189,7 @@ const mockBibleEntries: BibleEntry[] = [
 【性格弧光规划】
 1-10章：隐忍蛰伏，收集线索
 11-20章：初露锋芒，开始复仇
-21-30章：遭遇挫折，成长蜕变`,
+21-30章：遭遇挫折，成���蜕变`,
     priority: "high",
     pinned: true,
     relatedChapters: [1, 3, 5, 8, 12, 15, 18, 22, 25],
@@ -587,7 +586,6 @@ export function LuoBiModule() {
   const [isDetailOpen, setIsDetailOpen] = useState(false)
   const [showOutlinePanel, setShowOutlinePanel] = useState(true)
   const [aiSuggestionOpen, setAiSuggestionOpen] = useState(false)
-  const [isImmersiveMode, setIsImmersiveMode] = useState(false)
   const editorRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
@@ -621,16 +619,6 @@ export function LuoBiModule() {
   const unresolvedForeshadows = mockBibleEntries.filter(
     (e) => e.category === "foreshadow" && e.content.includes("未回收")
   ).length
-
-  // 如果进入沉浸式模式，显示沉浸式编辑器
-  if (isImmersiveMode) {
-    return (
-      <ImmersiveEditor
-        workTitle="风起苍穹"
-        onExit={() => setIsImmersiveMode(false)}
-      />
-    )
-  }
 
   return (
     <TooltipProvider>
@@ -731,12 +719,12 @@ export function LuoBiModule() {
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8"
-                      onClick={() => setIsImmersiveMode(true)}
+                      onClick={() => setIsZenMode(true)}
                     >
                       <Maximize2 className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>沉浸式写作 (F11)</TooltipContent>
+                  <TooltipContent>专注模式 (F11)</TooltipContent>
                 </Tooltip>
 
                 <Tooltip>
@@ -776,7 +764,7 @@ export function LuoBiModule() {
                     <DropdownMenuItem>正文</DropdownMenuItem>
                     <DropdownMenuItem>标题 1</DropdownMenuItem>
                     <DropdownMenuItem>标题 2</DropdownMenuItem>
-                    <DropdownMenuItem>标题 3</DropdownMenuItem>
+                    <DropdownMenuItem>标�� 3</DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>引用</DropdownMenuItem>
                     <DropdownMenuItem>代码块</DropdownMenuItem>
