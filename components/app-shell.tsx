@@ -119,10 +119,8 @@ export function AppShell({
           {currentWork && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="mr-2 flex h-8 items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/5 px-2.5 text-sm transition-colors hover:bg-primary/10">
+                <button className="mr-2 flex h-8 w-8 items-center justify-center rounded-lg border border-primary/30 bg-primary/5 transition-colors hover:bg-primary/10">
                   <BookOpen className="h-4 w-4 text-primary" />
-                  <span className="hidden font-medium text-foreground sm:inline">{currentWork.workTitle}</span>
-                  <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-80 p-0">
@@ -334,7 +332,7 @@ export function AppShell({
             </div>
             <DialogTitle className="text-center text-xl">AI 辅助创作声明</DialogTitle>
             <DialogDescription className="text-center">
-              在使用 AI 功能前，请阅读并确认以下内容
+              ��使用 AI 功能前，请阅读并确认以下内容
             </DialogDescription>
           </DialogHeader>
 
