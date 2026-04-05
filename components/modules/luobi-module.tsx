@@ -100,6 +100,7 @@ import {
 } from "@/components/ui/dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Slider } from "@/components/ui/slider"
+import { ImmersiveEditor } from "@/components/immersive-editor"
 
 // 类型定义
 interface BibleEntry {
@@ -343,7 +344,7 @@ const mockBibleEntries: BibleEntry[] = [
 意外失火
 
 【疑点】
-- 萧远山武功高强，为何未能逃脱
+- 萧远山��功高强，为何未能逃脱
 - 守卫张三当晚离奇消失
 - 福伯发现不明脚印
 
@@ -586,6 +587,7 @@ export function LuoBiModule() {
   const [isDetailOpen, setIsDetailOpen] = useState(false)
   const [showOutlinePanel, setShowOutlinePanel] = useState(true)
   const [aiSuggestionOpen, setAiSuggestionOpen] = useState(false)
+  const [isImmersiveMode, setIsImmersiveMode] = useState(false)
   const editorRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
@@ -619,6 +621,16 @@ export function LuoBiModule() {
   const unresolvedForeshadows = mockBibleEntries.filter(
     (e) => e.category === "foreshadow" && e.content.includes("未回收")
   ).length
+
+  // 如果进入沉浸式模式，显示沉浸式编辑器
+  if (isImmersiveMode) {
+    return (
+      <ImmersiveEditor
+        workTitle="风起苍穹"
+        onExit={() => setIsImmersiveMode(false)}
+      />
+    )
+  }
 
   return (
     <TooltipProvider>
@@ -719,12 +731,12 @@ export function LuoBiModule() {
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8"
-                      onClick={() => setIsZenMode(true)}
+                      onClick={() => setIsImmersiveMode(true)}
                     >
                       <Maximize2 className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>专注模式 (F11)</TooltipContent>
+                  <TooltipContent>沉浸式写作 (F11)</TooltipContent>
                 </Tooltip>
 
                 <Tooltip>
@@ -1283,7 +1295,7 @@ export function LuoBiModule() {
                 <DialogFooter>
                   <Button variant="outline" size="sm" className="gap-1.5">
                     <Edit3 className="h-4 w-4" />
-                    编辑
+                    ���辑
                   </Button>
                   <Button variant="outline" size="sm" className="gap-1.5">
                     <Copy className="h-4 w-4" />
