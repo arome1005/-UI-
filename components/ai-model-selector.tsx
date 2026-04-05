@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
@@ -223,6 +224,7 @@ export function AIModelSelector({
       <DialogContent className="max-w-3xl gap-0 p-0">
         <DialogHeader className="border-b border-border/40 px-6 py-4">
           <DialogTitle>{title}</DialogTitle>
+          <DialogDescription className="sr-only">选择 AI 模型和配置参数</DialogDescription>
         </DialogHeader>
 
         <div className="flex min-h-[480px]">
