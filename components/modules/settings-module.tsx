@@ -98,6 +98,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
+import { AIModelSelector, AI_MODELS, ModelSelectButton } from "@/components/ai-model-selector"
 import {
   Dialog,
   DialogContent,
@@ -759,18 +761,33 @@ function BillingSettings() {
 // AI 设置组件
 function AISettings() {
   const [selectedModels, setSelectedModels] = useState<Record<string, string>>({
-    tuiyan: "gpt-4-turbo",
-    liuguang: "gpt-4o",
-    wence: "claude-3-sonnet",
-    luobi: "gpt-4o",
-    shenghui: "claude-3-opus",
+    tuiyan: "jianshan",
+    liuguang: "guanyun",
+    wence: "jianshan",
+    luobi: "tingyu",
+    shenghui: "tingyu",
   })
   const [temperature, setTemperature] = useState(0.7)
   const [maxTokens, setMaxTokens] = useState(4000)
   const [streamResponse, setStreamResponse] = useState(true)
   const [autoSave, setAutoSave] = useState(true)
+  const [showModelSelector, setShowModelSelector] = useState(false)
+  const [editingModule, setEditingModule] = useState<string | null>(null)
 
-  const getModelConfig = (modelId: string) => aiModels.find((m) => m.id === modelId)
+  const getModelConfig = (modelId: string) => AI_MODELS.find((m) => m.id === modelId)
+
+  const handleOpenModelSelector = (moduleId: string) => {
+    setEditingModule(moduleId)
+    setShowModelSelector(true)
+  }
+
+  const handleSelectModel = (modelId: string) => {
+    if (editingModule) {
+      setSelectedModels({ ...selectedModels, [editingModule]: modelId })
+    }
+    setShowModelSelector(false)
+    setEditingModule(null)
+  }
 
   return (
     <div className="space-y-6">
@@ -797,88 +814,96 @@ function AISettings() {
                   <div>
                     <p className="font-medium text-foreground">{module.name}</p>
                     <p className="text-xs text-muted-foreground">
-                      {currentModel?.description}
+                      {currentModel?.subtitle}
                     </p>
                   </div>
                 </div>
-                <Select
-                  value={selectedModels[module.id]}
-                  onValueChange={(value) => setSelectedModels({ ...selectedModels, [module.id]: value })}
+                <button
+                  onClick={() => handleOpenModelSelector(module.id)}
+                  className="flex items-center gap-2 rounded-lg border border-border/50 bg-background px-3 py-2 text-left transition-colors hover:bg-muted/50"
                 >
-                  <SelectTrigger className="w-[180px] bg-background">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {aiModels.map((model) => (
-                      <SelectItem key={model.id} value={model.id}>
-                        <div className="flex items-center gap-2">
-                          <span>{model.name}</span>
-                          <Badge variant="outline" className="text-[10px]">
-                            ${model.costPer1kTokens}/1K
-                          </Badge>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  {currentModel?.icon}
+                  <div>
+                    <p className="text-sm font-medium text-foreground">{currentModel?.name}</p>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                </button>
               </div>
             )
           })}
         </div>
       </div>
 
-      {/* 模型详情 */}
+      {/* 可用模型概览 */}
       <div className="rounded-xl border border-border/40 bg-card/50 p-6">
         <h3 className="mb-4 text-lg font-semibold text-foreground">可用模型</h3>
         <div className="grid gap-4 sm:grid-cols-2">
-          {aiModels.map((model) => (
+          {AI_MODELS.map((model) => (
             <div
               key={model.id}
               className="rounded-lg border border-border/30 bg-muted/20 p-4"
             >
               <div className="mb-2 flex items-center justify-between">
-                <div>
-                  <h4 className="font-medium text-foreground">{model.name}</h4>
-                  <p className="text-xs text-muted-foreground">{model.provider}</p>
+                <div className="flex items-center gap-2">
+                  {model.icon}
+                  <div>
+                    <h4 className="font-medium text-foreground">{model.name}</h4>
+                    <p className="text-xs text-muted-foreground">{model.subtitle}</p>
+                  </div>
                 </div>
-                <Badge
-                  variant="outline"
-                  className={cn(
-                    model.quality === "premium" && "border-amber-500/50 text-amber-500",
-                    model.quality === "high" && "border-green-500/50 text-green-500",
-                    model.quality === "standard" && "border-muted-foreground/50"
-                  )}
-                >
-                  {model.quality === "premium" ? "顶级" : model.quality === "high" ? "高级" : "标准"}
-                </Badge>
+                {model.isLocal && (
+                  <Badge variant="outline" className="border-green-500/50 text-green-500">
+                    本地
+                  </Badge>
+                )}
               </div>
-              <p className="mb-3 text-sm text-muted-foreground">{model.description}</p>
+              <p className="mb-3 line-clamp-2 text-sm text-muted-foreground">{model.description}</p>
               <div className="flex items-center justify-between text-xs">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   <span className="flex items-center gap-1 text-muted-foreground">
-                    {model.speed === "fast" ? (
-                      <Zap className="h-3 w-3 text-green-500" />
-                    ) : model.speed === "medium" ? (
-                      <Activity className="h-3 w-3 text-amber-500" />
-                    ) : (
-                      <Timer className="h-3 w-3 text-muted-foreground" />
-                    )}
-                    {model.speed === "fast" ? "快速" : model.speed === "medium" ? "中等" : "较慢"}
+                    文采
+                    <span className="ml-1 flex gap-0.5">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <span
+                          key={i}
+                          className={cn(
+                            "h-1.5 w-1.5 rounded-full",
+                            i < model.ratings.literary ? "bg-amber-400" : "bg-muted"
+                          )}
+                        />
+                      ))}
+                    </span>
+                  </span>
+                  <span className="flex items-center gap-1 text-muted-foreground">
+                    遵从
+                    <span className="ml-1 flex gap-0.5">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <span
+                          key={i}
+                          className={cn(
+                            "h-1.5 w-1.5 rounded-full",
+                            i < model.ratings.instruction ? "bg-amber-400" : "bg-muted"
+                          )}
+                        />
+                      ))}
+                    </span>
                   </span>
                 </div>
-                <span className="font-medium text-foreground">${model.costPer1kTokens}/1K tokens</span>
-              </div>
-              <div className="mt-2 flex flex-wrap gap-1">
-                {model.capabilities.map((cap) => (
-                  <Badge key={cap} variant="secondary" className="text-[10px]">
-                    {cap}
-                  </Badge>
-                ))}
+                <span className="text-muted-foreground">{model.provider}</span>
               </div>
             </div>
           ))}
         </div>
       </div>
+
+      {/* AI Model Selector Dialog */}
+      <AIModelSelector
+        open={showModelSelector}
+        onOpenChange={setShowModelSelector}
+        selectedModelId={editingModule ? selectedModels[editingModule] : "jianshan"}
+        onSelectModel={handleSelectModel}
+        title="选择模型"
+      />
 
       {/* 全局参数 */}
       <div className="rounded-xl border border-border/40 bg-card/50 p-6">
