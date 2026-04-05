@@ -115,66 +115,85 @@ export function AppShell({
             </div>
           </div>
 
-          {/* Current Work Context - 当前作品上下文 */}
+          {/* Current Work Context Button - 当前作品上下文（可隐藏弹窗） */}
           {currentWork && (
-            <div className="mr-4 hidden items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 px-3 py-1.5 md:flex">
-              <BookOpen className="h-4 w-4 text-primary" />
-              <div className="flex items-center gap-1.5">
-                <span className="text-sm font-medium text-foreground">{currentWork.workTitle}</span>
-                {currentWork.currentChapterTitle && (
-                  <>
-                    <ChevronRight className="h-3 w-3 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">
-                      第{currentWork.currentChapterNumber}章
-                    </span>
-                  </>
-                )}
-              </div>
-              <div className="ml-2 flex items-center gap-1 text-[10px] text-muted-foreground">
-                <FileText className="h-3 w-3" />
-                <span>{(currentWork.wordCount || 0).toLocaleString()}字</span>
-              </div>
-              {currentWork.tags && currentWork.tags.length > 0 && (
-                <div className="ml-2 hidden items-center gap-1 lg:flex">
-                  {currentWork.tags.slice(0, 2).map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded bg-muted/50 px-1.5 py-0.5 text-[10px] text-muted-foreground"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="ml-1 rounded p-0.5 text-muted-foreground hover:bg-muted/50 hover:text-foreground">
-                    <ChevronDown className="h-3.5 w-3.5" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-64">
-                  <div className="px-2 py-1.5">
-                    <p className="text-sm font-medium">{currentWork.workTitle}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {currentWork.totalChapters}章 / {(currentWork.wordCount || 0).toLocaleString()}字
-                    </p>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="mr-2 flex h-8 items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/5 px-2.5 text-sm transition-colors hover:bg-primary/10">
+                  <BookOpen className="h-4 w-4 text-primary" />
+                  <span className="hidden font-medium text-foreground sm:inline">{currentWork.workTitle}</span>
+                  <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-80 p-0">
+                {/* 作品信息头部 */}
+                <div className="border-b border-border/50 bg-muted/30 p-4">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h4 className="font-semibold text-foreground">{currentWork.workTitle}</h4>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        第{currentWork.currentChapterNumber}章 · {currentWork.currentChapterTitle}
+                      </p>
+                    </div>
+                    <div className="flex gap-1">
+                      {currentWork.tags?.slice(0, 2).map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
+                  
+                  {/* 统计信息 */}
+                  <div className="mt-3 grid grid-cols-3 gap-3">
+                    <div className="rounded-lg bg-background/60 p-2 text-center">
+                      <p className="text-lg font-semibold text-foreground">{currentWork.totalChapters}</p>
+                      <p className="text-[10px] text-muted-foreground">总章节</p>
+                    </div>
+                    <div className="rounded-lg bg-background/60 p-2 text-center">
+                      <p className="text-lg font-semibold text-foreground">{((currentWork.wordCount || 0) / 10000).toFixed(1)}万</p>
+                      <p className="text-[10px] text-muted-foreground">总字数</p>
+                    </div>
+                    <div className="rounded-lg bg-background/60 p-2 text-center">
+                      <p className="text-lg font-semibold text-foreground">{currentWork.currentChapterNumber}</p>
+                      <p className="text-[10px] text-muted-foreground">当前章</p>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* 快捷操作 */}
+                <div className="p-2">
+                  <DropdownMenuItem onClick={() => onModuleChange("luobi")} className="gap-2 rounded-lg">
+                    <FileText className="h-4 w-4 text-primary" />
+                    <div className="flex-1">
+                      <p className="font-medium">继续编辑</p>
+                      <p className="text-xs text-muted-foreground">打开落笔模块</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onModuleChange("tuiyan")} className="gap-2 rounded-lg">
+                    <Sparkles className="h-4 w-4 text-amber-500" />
+                    <div className="flex-1">
+                      <p className="font-medium">查看大纲</p>
+                      <p className="text-xs text-muted-foreground">打开推演模块</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => onModuleChange("luobi")}>
-                    <FileText className="mr-2 h-4 w-4" />
-                    继续编辑
+                  <DropdownMenuItem onClick={() => onModuleChange("liubai")} className="gap-2 rounded-lg">
+                    <BookOpen className="h-4 w-4 text-muted-foreground" />
+                    <div className="flex-1">
+                      <p className="font-medium">切换作品</p>
+                      <p className="text-xs text-muted-foreground">返回作品库</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onModuleChange("tuiyan")}>
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    查看大纲
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onModuleChange("liubai")}>
-                    <BookOpen className="mr-2 h-4 w-4" />
-                    切换作品
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
 
           {/* Navigation Modules */}
