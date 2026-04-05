@@ -11,7 +11,6 @@ import { LiuguangModule } from "@/components/modules/liuguang-module"
 import { WenCeModule } from "@/components/modules/wence-module"
 import { SettingsModule } from "@/components/modules/settings-module"
 import { EmptyModule } from "@/components/modules/empty-module"
-import { LoginPage } from "@/components/login-page"
 import { ImmersiveEditor } from "@/components/immersive-editor"
 
 // 当前编辑的作品信息
@@ -21,14 +20,8 @@ interface EditingWork {
 }
 
 export default function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [activeModule, setActiveModule] = useState("liubai")
   const [editingWork, setEditingWork] = useState<EditingWork | null>(null)
-
-  // 如果未登录，显示登录页面
-  if (!isLoggedIn) {
-    return <LoginPage onLoginSuccess={() => setIsLoggedIn(true)} />
-  }
 
   // 如果正在编辑作品（从留白作品卡片点击进入），显示沉浸式写作页面
   if (editingWork) {
