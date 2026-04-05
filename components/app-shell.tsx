@@ -128,7 +128,7 @@ export function AppShell({ activeModule, onModuleChange, children }: AppShellPro
                   <User className="mr-2 h-4 w-4" />
                   个人资料
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onModuleChange("settings")}>
                   <Settings className="mr-2 h-4 w-4" />
                   设置
                 </DropdownMenuItem>
