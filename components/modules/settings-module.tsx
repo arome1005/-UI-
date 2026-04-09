@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTheme } from "next-themes"
 import {
   Settings,
   User,
@@ -795,7 +796,7 @@ function AISettings() {
       <div className="rounded-xl border border-border/40 bg-card/50 p-6">
         <h3 className="mb-4 text-lg font-semibold text-foreground">模块模型配置</h3>
         <p className="mb-4 text-sm text-muted-foreground">
-          为不同模块选择最适合的 AI 模型，平衡质量与成本
+          为不同模块���择最适合的 AI 模型，平衡质量与成本
         </p>
 
         <div className="space-y-4">
@@ -1135,7 +1136,7 @@ function EditorSettings() {
 
 // 外观设置组件
 function AppearanceSettings() {
-  const [theme, setTheme] = useState<"light" | "dark" | "system">("dark")
+  const { theme, setTheme } = useTheme()
   const [accentColor, setAccentColor] = useState("blue")
   const [sidebarPosition, setSidebarPosition] = useState<"left" | "right">("left")
   const [compactMode, setCompactMode] = useState(false)
